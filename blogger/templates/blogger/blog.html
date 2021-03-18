@@ -1,0 +1,26 @@
+{% extends 'blogger/base.html' %}
+{% block title %}{{ blog.title }}{% endblock %}
+{% block content %}
+{% if blog.author_id == request.user.id %}
+<form action="{% url 'blog_by_id' blog.id %}" method="POST">
+    {% csrf_token %}
+    <input type="text" name="subject" maxlength="80" size="82" placeholder="Post subject" value="{{ subject }}"/>
+    <br/>
+    {% if subject_error %}
+    <p style="color:red;">{{ subject_error }}</p>
+    {% endif %}
+    <textarea name="text" maxlength="4096" rows="10" cols="80" placeholder="Post text">{{ text }}</textarea>
+    {% if text_error %}
+    <p style="color:red;">{{ text_error }}</p>
+    {% endif %}
+    <br/>
+    <input type="submit" value="Create post" />
+</form>
+{% endif %}
+<ul>
+    {% for post in posts %}
+    <li><i>{{ post.created_at }}</i> <b>{{ post.subject }}</b><br/>
+        <p>{{ post.text }}</p></li>
+    {% endfor %}
+</ul>
+{% endblock %}
