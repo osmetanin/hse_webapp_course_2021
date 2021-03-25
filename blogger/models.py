@@ -1,5 +1,6 @@
 from django.db.models import *
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 class Blog(Model):
@@ -8,7 +9,10 @@ class Blog(Model):
     author = ForeignKey(User, on_delete=CASCADE, default=1)
 
     def __str__(self):
-        return str(self.title)
+        return '"%s" by @%s' % (self.title, self.author.username)
+
+    def get_absolute_url(self):
+        return reverse("blog_by_id", kwargs={'blog_id': self.id})
 
 
 class Post(Model):
@@ -20,3 +24,6 @@ class Post(Model):
 
     def __str__(self):
         return str(self.subject)
+
+    def is_edited(self):
+        return (self.updated_at - self.created_at).total_seconds() >= 1

@@ -3,7 +3,7 @@
 <h2>
     <ul>
         {% for blog in blogs %}
-        <li><a href="{% url 'blog_by_id' blog.id %}">{{ blog.title }}</a></li>
+        <li><a href="{% url 'blog_by_id' blog.id %}">{{ blog.title }}</a> ({{ blog.post_count }} post(s))</li>
         {% endfor %}
     </ul>
 </h2>

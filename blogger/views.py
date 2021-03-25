@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Count
 
 from .models import Blog, Post
 from .forms import LoginForm, RegistrationForm
@@ -59,7 +60,8 @@ def sign_up(request):
 
 
 def get_blog_list(request):
-    blogs = Blog.objects.order_by('-created_at')
+    blogs = Blog.objects.annotate(post_count=Count('post')).order_by('-post_count').values('id', 'title', 'post_count')
+#    blogs = Blog.objects.order_by('-created_at')
     context = {'blogs': blogs}
     return render(request, 'blogger/index.html', context)
 
